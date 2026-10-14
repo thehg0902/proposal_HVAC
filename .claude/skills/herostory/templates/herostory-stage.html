@@ -1,0 +1,90 @@
+<!-- HEROSTORY STAGE — one continuous pinned run. The wrapper height is
+     the runway: (100 + ~90-120 per footage story, ~70-90 per graphic)svh.
+     Media layers hand off by opacity crossfade only; DOM order = stacking
+     order (base first, last story on top) — reordering silently reverses
+     the dissolves.
+     data-scrub-* mirror each scrub/<slot>/manifest.json: read from
+     attributes, never fetch()ed, so the page still scrubs from file://.
+     A [data-graphic] layer and a [data-scrub] canvas are interchangeable
+     at the same beat index — that is the zero-media -> footage upgrade.
+     Delete any beat this build doesn't use — the driver skips missing
+     elements. -->
+<section class="hero-stage" id="top" data-hero-stage data-header-dark>
+  <div class="hero-stage__inner">
+
+    <div class="hero-stage__media" aria-hidden="true">
+      <!-- beat 0: looping hero (optional). Poster mandatory = LCP. -->
+      <video class="hero-stage__video" data-hero-loop
+             autoplay muted playsinline preload="auto"
+             poster="assets/images/hero-loop-poster.webp">
+        <source src="assets/video/hero-loop.mp4" type="video/mp4">
+      </video>
+      <!-- beat 1 as a GRAPHIC (zero media spend): inline SVG polygon
+           scene staged from client.md ## Hero story. See
+           herostory-graphic-beat.html for a worked example. -->
+      <div class="hero-stage__graphic" data-graphic="1">
+        <!-- inline <svg> polygon scene here -->
+      </div>
+      <!-- beat 1 as FOOTAGE instead (same windows, swap the config type).
+      <canvas class="hero-stage__canvas" data-scrub="1"
+              width="1440" height="812"
+              data-scrub-frames="61"
+              data-scrub-base="assets/images/scrub/story-1/"
+              data-scrub-pattern="frame-%04d.webp"></canvas>
+      -->
+      <!-- beat 2..N: scrub sequences. width/height = frame pixel size. -->
+      <canvas class="hero-stage__canvas" data-scrub="2"
+              width="1440" height="812"
+              data-scrub-frames="61"
+              data-scrub-base="assets/images/scrub/story-2/"
+              data-scrub-pattern="frame-%04d.webp"></canvas>
+      <div class="hero-stage__scrim hero-stage__scrim--lead"></div>
+      <div class="hero-stage__scrim hero-stage__scrim--flat"></div>
+    </div>
+
+    <!-- copy beat 0: visible at rest, fades out first -->
+    <div class="hero-stage__layer hero-stage__layer--lead" data-hero-layer="lead">
+      <div class="container">
+        <span class="eyebrow eyebrow--on-dark">[PLACEHOLDER: eyebrow]</span>
+        <h1><span>[PLACEHOLDER: headline]</span></h1>
+        <p class="hero-sub">[PLACEHOLDER: subline]</p>
+        <div class="hero-actions">
+          <a class="btn btn-soft" href="#">[PLACEHOLDER: primary CTA]</a>
+          <a class="btn btn-glass" href="#">[PLACEHOLDER: secondary CTA]</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- copy beats 1..N: .line children get the driver's stagger.
+         role/aria-label because the layer's h2 arrives mid-scroll. -->
+    <div class="hero-stage__layer hero-stage__layer--story" data-hero-layer="s1"
+         role="group" aria-label="[PLACEHOLDER: story 1 label]">
+      <div class="container">
+        <h2 class="line">[PLACEHOLDER: story 1 headline]</h2>
+        <p class="line">[PLACEHOLDER: story 1 body]</p>
+        <p class="line line--muted">[PLACEHOLDER: strapline]</p>
+        <p class="line"><a class="btn btn-glass line-cta" href="#">[PLACEHOLDER: CTA]</a></p>
+      </div>
+    </div>
+
+    <div class="hero-stage__layer hero-stage__layer--story" data-hero-layer="s2"
+         role="group" aria-label="[PLACEHOLDER: story 2 label]">
+      <div class="container">
+        <h2 class="line">[PLACEHOLDER: story 2 headline]</h2>
+        <p class="line">[PLACEHOLDER: story 2 body]</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- In <head>: the no-JS fallback. The runway is pure scroll distance
+     the choreography would have used — collapse it and show only the
+     lead beat over the poster or the graphic's rest state (a finished
+     hero on its own).
+<noscript><style>
+  .hero-stage{height:100svh}
+  .hero-stage__layer--story{display:none}
+  .hero-stage__canvas{display:none}
+</style></noscript>
+-->

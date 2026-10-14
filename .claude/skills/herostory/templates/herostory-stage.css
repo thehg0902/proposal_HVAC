@@ -1,0 +1,95 @@
+/* ===== Herostory stage =====
+   .hero-stage is the RUNWAY — its height is the scroll distance the
+   choreography maps onto. __inner is the sticky viewport-sized stage.
+   Media well at z-index 0, copy layers at z-index 1.
+   Custom properties (--hero-scrim, --story-scrim, --hero-focal-x,
+   --beat-p) are published by the driver every tick and must carry NO
+   transition, or they lag the scroll.
+
+   padding-block:0 is load-bearing: wrapper padding would both inset
+   the sticky stage AND desync the driver, whose runway is
+   offsetHeight − stickyHeight (padding sits inside offsetHeight but
+   is NOT part of the sticky travel).
+
+   Height = (100 + runway)svh — e.g. two stories: 340svh.
+   vh first, svh second: without svh support the svh line is invalid;
+   the vh fallback keeps the effect (just less stable under mobile
+   browser chrome). If BOTH were missing the wrapper collapses to
+   auto, runway <= 0, and the driver silently disables itself. */
+.hero-stage{position:relative;height:340vh;height:340svh;padding-block:0}
+.hero-stage__inner{position:sticky;top:0;height:100vh;height:100svh;
+                   overflow:hidden;color:#fff}
+
+.hero-stage__media{position:absolute;inset:0;z-index:0}
+/* Desktop keeps a fixed centre crop; only the portrait query below
+   tracks the subject via --hero-focal-x. */
+.hero-stage__video,
+.hero-stage__canvas{position:absolute;inset:0;width:100%;height:100%;
+                    object-fit:cover;object-position:50% center}
+/* Sequences start hidden; the driver crossfades each over the one
+   beneath. Never add a transition here — it lags reverse scrubbing. */
+.hero-stage__canvas{opacity:0}
+
+/* ===== Graphic beats (the zero-media hero) =====
+   An inline SVG polygon scene. Same opacity handoff as a canvas; the
+   driver publishes --beat-p (0..1 within this beat's window) and the
+   per-build CSS below moves shapes with transform/opacity ONLY.
+   Never animate `points`/`d` (layout+paint every tick) and never put a
+   transition on anything reading --beat-p. */
+.hero-stage__graphic{position:absolute;inset:0;opacity:0}
+.hero-stage__graphic svg{width:100%;height:100%;display:block}
+/* The FIRST graphic beat is the page's rest state, so it must be
+   visible before the driver's first tick — otherwise the hero is blank
+   until the visitor scrolls, and blank is what a no-JS visitor keeps. */
+.hero-stage__graphic[data-graphic="1"]{opacity:1}
+
+.hero-stage__scrim{position:absolute;inset:0}
+/* Gradient scrim aimed at the lead copy's side — the scrim must follow
+   the copy or the text lands on the bright end of the ramp. Ramp
+   values are per-build: measure against the BRIGHTEST frame under the
+   smallest type, not the average frame. */
+.hero-stage__scrim--lead{background:linear-gradient(90deg,
+     rgba(0,0,0,.82),rgba(0,0,0,.38));opacity:var(--hero-scrim,1)}
+.hero-stage__scrim--flat{background:rgba(0,0,0,.46);
+     opacity:var(--story-scrim,0)}
+
+.hero-stage__layer{position:absolute;inset:0;z-index:1;display:flex;
+                   align-items:center;will-change:opacity,transform}
+/* Story layers sit above the lead at inset:0 and would swallow clicks
+   on the hero CTAs — so they opt out, and their own links opt back in.
+   (The driver also flips visibility:hidden at opacity 0, keeping
+   hidden copy out of the tab order and the a11y tree.) */
+.hero-stage__layer--story{opacity:0;text-align:center;pointer-events:none}
+.hero-stage__layer--story .line-cta,
+.hero-stage__layer--story a{pointer-events:auto}
+
+/* ===== Portrait focal tracking (phones) =====
+   A portrait cover-crop discards most of a 16:9 frame; the driver
+   publishes --hero-focal-x so the subject stays in the crop instead
+   of sliding out of frame across beats. Graphic beats don't need this
+   (give the SVG preserveAspectRatio="xMidYMid slice" instead). */
+@media(max-width:640px){
+  .hero-stage__video,
+  .hero-stage__canvas{object-position:var(--hero-focal-x,40%) center}
+}
+
+/* ===== Reduced motion =====
+   Collapse the whole choreography to a normal stacked document. The
+   JS driver also exits before binding — this block is what the user
+   actually sees: poster (or the first graphic beat's rest state) plus
+   all copy, static. */
+@media(prefers-reduced-motion:reduce){
+  .hero-stage{height:auto}
+  .hero-stage__inner{position:relative;height:auto;min-height:100svh;
+                     display:flex;flex-direction:column;justify-content:center;
+                     gap:var(--space-8);padding-block:var(--space-9)}
+  .hero-stage__layer{position:static;opacity:1!important;transform:none!important;
+                     visibility:visible!important;pointer-events:auto}
+  .hero-stage__canvas{display:none}
+  .hero-stage__layer .line{opacity:1!important;transform:none!important}
+  /* The graphic's rest state IS the hero here: keep beat 1, drop the
+     later beats that would stack meaninglessly without scroll. */
+  .hero-stage__graphic{opacity:0}
+  .hero-stage__graphic[data-graphic="1"]{opacity:1;position:absolute}
+  .hero-stage__graphic *{transform:none!important}
+}

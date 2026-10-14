@@ -1,0 +1,12 @@
+node_modules/
+deliverables/
+.obsidian/
+.DS_Store
+*.log
+.env
+input/assets-intake/originals/
+input/creative/*
+!input/creative/README.md
+system/preview/*
+!system/preview/.gitkeep
+__pycache__/
