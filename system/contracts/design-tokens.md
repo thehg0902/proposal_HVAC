@@ -1,4 +1,4 @@
-# Contract: Design Tokens  (v1.2.0)
+# Contract: Design Tokens  (v1.3.0)
 
 All visual values are CSS custom properties defined ONCE in
 `output/shared/tokens.css` on `:root`. No component may hardcode a color,
@@ -19,6 +19,10 @@ Layout:        --container-max (default 1200px), --section-pad-y,
 Elevation:     --shadow-sm, --shadow-md, --shadow-lg
 Motion:        --duration-fast (150ms), --duration-base (300ms),
                --duration-slow (600ms), --ease-standard, --ease-out-expo
+Progression:   --section-bg-1 .. --section-bg-N (N = section count, min 3;
+               every step AA against --color-text and --color-text-muted),
+               --page-bg-blend (driver output slot, written by script.js)
+               (added v1.3.0 - the design-tokens skill rule 2a already emits these)
 
 ## Rules
 1. Producer: the design-tokens skill writes `output/shared/tokens.css`.

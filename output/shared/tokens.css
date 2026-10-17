@@ -1,0 +1,84 @@
+/* Design tokens - direction "Cold front, warm front" (DECISIONS.md 2026-10-15).
+   Niche default palette (no client palette, no logo): furnace-steel blue
+   primary, ember accent, cool-to-warm neutrals. System font stacks only
+   (file-structure rule 5: no font CDN; nothing self-hosted yet). */
+:root {
+  /* Colour - AA verified (body >= 4.5:1, large/UI >= 3:1) */
+  --color-primary: #1d4f7c;        /* 8.5:1 on white */
+  --color-primary-dark: #13314f;   /* 13.3:1 on white */
+  --color-accent: #b8501b;         /* ember: 4.7:1 on bg, white label 5.0:1 */
+  --color-bg: #f6f8fb;
+  --color-surface: #ffffff;
+  --color-text: #0f1c2b;           /* 17.2:1 on surface */
+  --color-text-muted: #46566a;     /* 7.5:1 on surface, >= 6.4:1 on every section bg */
+  --color-border: #c9d3df;         /* decorative dividers only - never a control's only boundary */
+  --color-success: #1d7048;
+  --color-error: #b42318;
+
+  /* Section colour progression: cold (top) -> warm (close). 12 steps = 12
+     sections; every step AA against --color-text (>= 14.7:1) and
+     --color-text-muted (>= 6.4:1). */
+  --section-bg-1: #e6eef8;
+  --section-bg-2: #eaf1f8;
+  --section-bg-3: #eef3f8;
+  --section-bg-4: #f1f4f7;
+  --section-bg-5: #f4f5f6;
+  --section-bg-6: #f6f5f2;
+  --section-bg-7: #f8f3ec;
+  --section-bg-8: #faf0e4;
+  --section-bg-9: #fbede0;
+  --section-bg-10: #fcebdc;
+  --section-bg-11: #fdeee2;
+  --section-bg-12: #fef2e8;
+  --page-bg-blend: var(--section-bg-1); /* written by script.js on scroll */
+
+  /* Typography - sturdy, gauge-like sans for headings; system UI for body */
+  --font-heading: "Bahnschrift", "DIN Alternate", "DIN Next", "Barlow", "Segoe UI", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Modular scale 1.25 (calm, between 1.2 and 1.333) */
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: clamp(2rem, 2.2vw + 1.3rem, 2.75rem);
+  --text-hero: clamp(2.4rem, 5vw + 1rem, 4.75rem);
+  --leading-tight: 1.12;
+  --leading-normal: 1.55;
+  --leading-loose: 1.75;
+
+  /* Spacing - 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+  --space-10: 4rem;
+  --space-11: 5rem;
+  --space-12: 6rem;
+
+  /* Layout */
+  --container-max: 1200px;
+  --section-pad-y: clamp(4rem, 8vw, 7rem);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  /* Elevation - cool-tinted shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 28, 43, 0.06), 0 1px 1px rgba(15, 28, 43, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 28, 43, 0.08), 0 2px 4px rgba(15, 28, 43, 0.05);
+  --shadow-lg: 0 18px 40px rgba(15, 28, 43, 0.12), 0 6px 12px rgba(15, 28, 43, 0.06);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}

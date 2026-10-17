@@ -12,10 +12,10 @@
 
 ## Prospect
 <!-- Required: Business name. The rest is optional. -->
-- Business name:
+- Business name: [PLACEHOLDER: HVAC business name]
 - Website:
 - Location:
-- Niche:
+- Niche: HVAC
 
 ## Research
 <!-- Leave blank when input/research/ holds exactly one file. Name the
